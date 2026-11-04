@@ -1,0 +1,37 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: email-app
+  datasource:
+    url: ${EMAIL_DB_URL}
+    username: ${EMAIL_DB_USER}
+    password: ${EMAIL_DB_PASSWORD}
+  flyway:
+    user: ${EMAIL_FLYWAY_USER:${spring.datasource.username}}
+    password: ${EMAIL_FLYWAY_PASSWORD:${spring.datasource.password}}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      group-id: neoguri95-email-app
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT:25}
+    username: ${SMTP_USER:}
+    password: ${SMTP_PASSWORD:}
+
+site:
+  base-url: ${SITE_BASE_URL:https://neoguri95.com}
+
+email:
+  from: ${MAIL_FROM:notifications@neoguri95.com}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus

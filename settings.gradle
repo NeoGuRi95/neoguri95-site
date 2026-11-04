@@ -1,0 +1,3 @@
+rootProject.name = 'neoguri95-site'
+
+include 'site-app', 'email-app'

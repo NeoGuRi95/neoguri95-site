@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/neoguri95_email
+    username: postgres
+    password: postgres
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0
+  kafka:
+    bootstrap-servers: localhost:9092
+  mail:
+    host: localhost
+    port: 1025
+site:
+  base-url: http://localhost:8080

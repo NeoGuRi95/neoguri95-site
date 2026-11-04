@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>구독 확인</title></head>
+<body><main><h1>새 글 알림을 구독할까요?</h1><form action="/subscriptions/confirm" method="post"><input type="hidden" name="token" th:value="${token}"><button type="submit">구독 완료</button></form></main></body>
+</html>

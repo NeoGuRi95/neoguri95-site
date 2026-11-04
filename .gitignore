@@ -1,0 +1,24 @@
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+.idea/
+*.iml
+out/
+.vscode/
+
+.DS_Store
+
+# 개인 운영 배치와 비밀 설정
+docs/operations-infrastructure.md
+docs/*.private.md
+compose.prod*.yml
+compose.prod*.yaml
+compose.production*.yml
+compose.production*.yaml
+infra/production/
+.env
+.env.*
+!.env.example
+*.pem
+*.key

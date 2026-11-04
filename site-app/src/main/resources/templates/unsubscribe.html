@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>구독 해지</title></head>
+<body><main><h1>새 글 알림을 해지할까요?</h1><form action="/subscriptions/unsubscribe" method="post"><input type="hidden" name="token" th:value="${token}"><button type="submit">구독 해지</button></form></main></body>
+</html>
