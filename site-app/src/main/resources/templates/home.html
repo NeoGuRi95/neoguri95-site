@@ -1,18 +1,71 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>neoguri95</title></head>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f6f0e8">
+  <meta name="description" content="네오구리의 글과 새 글 알림을 만나는 공간입니다.">
+  <title>neoguri95</title>
+  <link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css">
+</head>
 <body>
-  <main>
-    <h1>neoguri95</h1>
-    <p>새 글을 이메일로 받아보세요.</p>
-    <form action="/subscriptions" method="post">
-      <label for="email">이메일</label>
-      <input id="email" name="email" type="email" required autocomplete="email">
-      <button type="submit">새 글 알림 구독</button>
-    </form>
-    <p th:if="${param.subscription}">확인 메일을 보냈습니다. 메일의 링크를 눌러 구독을 완료해 주세요.</p>
-    <h2>글</h2>
-    <ul><li th:each="post : ${posts}"><a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">글 제목</a></li></ul>
-  </main>
+  <div class="site-wrap" id="top">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="neoguri95 홈">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span>neoguri<span class="brand-number">95</span><span class="brand-dot">.</span></span>
+      </a>
+      <nav class="site-nav" aria-label="주 메뉴">
+        <a href="#posts">글</a>
+        <a href="#subscribe">새 글 알림</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">NEOGURI95.COM</p>
+          <h1 id="hero-title">안녕하세요,<br>네오구리입니다.</h1>
+          <p class="hero-description">만들고 배우며 떠오른 생각을 기록합니다.</p>
+          <a class="text-link" href="#posts">글 읽기 <span aria-hidden="true">&gt;</span></a>
+        </div>
+        <div class="hero-image">
+          <img th:src="@{/images/hero-scene.svg}" src="/images/hero-scene.svg" alt="줄무늬 꼬리를 가진 픽셀 너구리가 노트북을 타이핑하는 모습" width="480" height="360">
+        </div>
+      </section>
+
+      <section class="posts-section" id="posts" aria-labelledby="posts-title">
+        <h2 id="posts-title">글</h2>
+        <ul class="post-list" th:if="${!#lists.isEmpty(posts)}">
+          <li th:each="post : ${posts}">
+            <a th:href="@{/posts/{id}(id=${post.id})}">
+              <time th:attr="datetime=${#dates.format(post.publishedAt, 'yyyy-MM-dd')}" th:text="${#dates.format(post.publishedAt, 'yyyy.MM.dd')}">2026.11.04</time>
+              <span class="post-title" th:text="${post.title}">글 제목</span>
+              <span class="post-arrow" aria-hidden="true">&gt;</span>
+            </a>
+          </li>
+        </ul>
+        <p class="empty-posts" th:if="${#lists.isEmpty(posts)}">첫 글을 준비하고 있어요.</p>
+      </section>
+
+      <section class="subscribe-section" id="subscribe" aria-labelledby="subscribe-title">
+        <div class="subscribe-copy">
+          <h2 id="subscribe-title">새 글 알림</h2>
+          <p>새 글이 올라오면 이메일로 알려드릴게요.</p>
+        </div>
+        <form action="/subscriptions" method="post">
+          <label for="email">이메일 주소</label>
+          <div class="input-row">
+            <input id="email" name="email" type="email" placeholder="hello@example.com" required autocomplete="email">
+            <button type="submit">구독하기</button>
+          </div>
+          <p class="form-hint">확인 메일의 링크를 누르면 구독이 완료됩니다. 언제든 해지할 수 있어요.</p>
+        </form>
+        <p class="form-success" role="status" th:if="${param.subscription}">확인 메일을 보냈어요. 메일의 링크를 눌러 구독을 완료해 주세요.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer"><span>© neoguri95</span><a href="#top">맨 위로 ^</a></footer>
+  </div>
 </body>
 </html>

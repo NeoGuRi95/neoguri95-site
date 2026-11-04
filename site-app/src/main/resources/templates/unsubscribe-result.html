@@ -1,5 +1,7 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>구독 해지</title></head>
-<body><main><h1 th:text="${unsubscribed} ? '구독을 해지했습니다' : '이미 해지했거나 유효하지 않은 링크입니다'">구독 해지</h1><a href="/">홈으로</a></main></body>
-</html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>구독 해지 — neoguri95</title><link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css"></head>
+<body><div class="site-wrap"><header class="site-header"><a class="brand" href="/" aria-label="neoguri95 홈"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>neoguri<span class="brand-number">95</span><span class="brand-dot">.</span></span></a><nav class="site-nav" aria-label="주 메뉴"><a href="/">홈</a><a href="/#posts">글 모음</a><a class="nav-subscribe" href="/#subscribe">새 글 알림 <span aria-hidden="true">&gt;</span></a></nav></header>
+  <main class="page-main"><a class="back-link" href="/"><span aria-hidden="true">&lt;</span> 홈으로</a><div class="action-card"><p class="page-kicker" th:text="${unsubscribed} ? 'SUBSCRIPTION / ENDED' : 'SUBSCRIPTION / CHECK LINK'">SUBSCRIPTION</p><h1 th:text="${unsubscribed} ? '구독을 해지했어요.' : '링크를 확인해 주세요.'">구독 해지</h1><p th:text="${unsubscribed} ? '그동안 함께해 주셔서 고마워요. 언제든 다시 찾아와 주세요!' : '이미 해지했거나 유효하지 않은 링크입니다.'">구독 결과</p><a class="button button-primary" href="/">홈으로 돌아가기 <span aria-hidden="true">&gt;</span></a></div></main>
+  <footer class="site-footer"><div><a class="footer-brand" href="/">neoguri95<span>.</span></a><p>생각을 기록하고, 가끔 나눕니다.</p></div><div class="footer-right"><span>© NEOGURI95</span></div></footer>
+</div></body></html>

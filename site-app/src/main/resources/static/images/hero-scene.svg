@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="80 80 320 240" shape-rendering="crispEdges">
+  <title>줄무늬 꼬리를 가진 픽셀 너구리가 노트북을 타이핑하는 모습</title>
+  <style>
+    .paw-left { animation: tap .8s steps(1, end) infinite; }
+    .paw-right { animation: tap .8s steps(1, end) -.4s infinite; }
+    .cursor { animation: blink 1s steps(1, end) infinite; }
+    @keyframes tap { 0%, 49%, 100% { transform: translateY(0); } 25% { transform: translateY(5px); } }
+    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .paw-left, .paw-right, .cursor { animation: none; }
+    }
+  </style>
+  <path fill="#e5c6bc" d="M0 0h480v360H0z"/>
+  <path fill="#f9e4cd" d="M0 0h480v176H0z"/>
+  <path fill="#f6d3ba" d="M0 112h480v88H0z"/>
+  <path fill="#ffe6b4" d="M320 40h24v-8h32v8h24v24h8v32h-8v24h-24v8h-32v-8h-24V96h-8V64h8z"/>
+  <path fill="#e8ac9f" d="M0 160h48v-16h32v16h40v16h32v-16h48v32h48v-16h40v16h40v-32h56v16h40v-16h56v56H0z"/>
+  <path fill="#b994ab" d="M0 208h64v-16h48v16h40v-8h40v16h56v-24h48v24h48v-16h56v16h80v144H0z"/>
+  <path fill="#8a87a7" d="M0 248h64v-24h56v24h40v-16h40v16h64v-24h56v24h48v-16h64v16h48v112H0z"/>
+  <path fill="#fdf4dd" d="M48 48h40v8h16v16H40V56h8zm56 72h32v8h16v16H96v-16h8z"/>
+  <path fill="#fef4df" d="M416 40h8v8h-8zm16 8h8v8h-8zM120 32h8v8h-8zm-8 8h8v8h-8zm16 0h8v8h-8zm-8 8h8v8h-8z"/>
+  <path fill="#5c5d76" d="M0 288h480v72H0z"/>
+  <path fill="#7a7585" d="M0 288h480v8H0z"/>
+  <path fill="#4e506b" d="M32 248h24v40H32zm8-24h8v24h-8zm-8-16h24v16H32zm-8 16h40v8H24zm368 16h24v48h-24zm8-24h8v24h-8zm-8-16h24v16h-24zm-8 16h40v8h-40z"/>
+  <path fill="#c9a87d" d="M104 280h288v16H104z"/>
+  <path fill="#8c6770" d="M88 296h320v16H88zM104 312h16v48h-16zm272 0h16v48h-16z"/>
+  <path fill="#453f59" d="M304 224h24v-16h16v-16h16v-24h16v8h8v48h-8v16h-16v16h-16v8h-40v-16h16v-8h-16z"/>
+  <path fill="#b4a1a0" d="M360 184h16v8h-16zm-8 16h24v8h-24zm-16 16h32v8h-32zm-8 16h32v8h-32zm-8 16h24v8h-24z"/>
+  <path fill="#453f59" d="M168 144h32v-16h32v16h32v-16h32v16h16v96H168z"/>
+  <path fill="#807587" d="M184 144h16v-16h24v16h48v-16h24v16h16v80H184z"/>
+  <path fill="#b4a1a0" d="M200 160h96v64h-96z"/>
+  <path fill="#453f59" d="M200 176h32v24h-32zm64 0h32v24h-32z"/>
+  <path fill="#e6d3bd" d="M208 184h16v8h-16zm64 0h16v8h-16z"/>
+  <path fill="#332f49" d="M216 184h8v8h-8zm56 0h8v8h-8z"/>
+  <path fill="#f3dfc9" d="M224 200h48v24h-48z"/>
+  <path fill="#453f59" d="M240 200h16v8h-16zm-8 16h32v8h-32z"/>
+  <path fill="#453f59" d="M192 208h8v8h-8zm96 0h8v8h-8z"/>
+  <path fill="#6e8d8c" d="M200 224h96v64h-96z"/>
+  <path fill="#4d7077" d="M216 224h64v64h-64z"/>
+  <path fill="#b4a1a0" d="M184 232h16v40h-16zm112 0h16v40h-16z"/>
+  <path fill="#f1d9b8" d="M176 264h24v16h-24zm120 0h24v16h-24z"/>
+  <path fill="#353950" d="M160 272h176v16H160z"/>
+  <path fill="#6b7488" d="M168 240h160v40H168z"/>
+  <path fill="#a1a5ac" d="M176 248h144v32H176z"/>
+  <path fill="#e8dfcb" d="M232 256h32v8h-32zm-8 8h48v8h-48z"/>
+  <path class="cursor" fill="#353950" d="M272 256h8v16h-8z"/>
+  <path fill="#353950" d="M160 280h176v12H160z"/>
+  <path fill="#7d8799" d="M168 280h160v8H168z"/>
+  <path fill="#e8dfcb" d="M224 282h8v4h-8zm16 0h8v4h-8zm16 0h8v4h-8z"/>
+  <g class="paw-left">
+    <path fill="#453f59" d="M204 268h28v20h-28z"/>
+    <path fill="#c6b1a8" d="M208 272h20v12h-20z"/>
+    <path fill="#f3dfc9" d="M208 284h8v4h-8zm12 0h8v4h-8z"/>
+  </g>
+  <g class="paw-right">
+    <path fill="#453f59" d="M264 268h28v20h-28z"/>
+    <path fill="#c6b1a8" d="M268 272h20v12h-20z"/>
+    <path fill="#f3dfc9" d="M268 284h8v4h-8zm12 0h8v4h-8z"/>
+  </g>
+  <path fill="#f3d4a8" d="M64 280h48v8H64zm312 0h48v8h-48z"/>
+  <path fill="#6e8d8c" d="M72 264h24v16H72zm312 0h24v16h-24z"/>
+  <path fill="#fef4df" d="M16 304h8v8h-8zm440 16h8v8h-8z"/>
+</svg>

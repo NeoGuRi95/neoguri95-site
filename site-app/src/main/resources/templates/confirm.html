@@ -1,5 +1,7 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>구독 확인</title></head>
-<body><main><h1>새 글 알림을 구독할까요?</h1><form action="/subscriptions/confirm" method="post"><input type="hidden" name="token" th:value="${token}"><button type="submit">구독 완료</button></form></main></body>
-</html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>구독 확인 — neoguri95</title><link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css"></head>
+<body><div class="site-wrap"><header class="site-header"><a class="brand" href="/" aria-label="neoguri95 홈"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>neoguri<span class="brand-number">95</span><span class="brand-dot">.</span></span></a><nav class="site-nav" aria-label="주 메뉴"><a href="/">홈</a><a href="/#posts">글 모음</a><a class="nav-subscribe" href="/#subscribe">새 글 알림 <span aria-hidden="true">&gt;</span></a></nav></header>
+  <main class="page-main"><a class="back-link" href="/"><span aria-hidden="true">&lt;</span> 홈으로</a><div class="action-card"><p class="page-kicker">ONE MORE STEP / MAIL</p><h1>새 글 알림을<br>구독할까요?</h1><p>버튼을 누르면 구독이 완료됩니다. 새로운 글이 올라오면 메일로 알려드릴게요.</p><form action="/subscriptions/confirm" method="post"><input type="hidden" name="token" th:value="${token}"><button class="button button-primary" type="submit">구독 완료 <span aria-hidden="true">&gt;</span></button></form></div></main>
+  <footer class="site-footer"><div><a class="footer-brand" href="/">neoguri95<span>.</span></a><p>생각을 기록하고, 가끔 나눕니다.</p></div><div class="footer-right"><span>© NEOGURI95</span></div></footer>
+</div></body></html>
