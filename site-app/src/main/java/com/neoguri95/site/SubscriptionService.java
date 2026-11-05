@@ -43,6 +43,31 @@ public class SubscriptionService {
         return true;
     }
 
+    /** Sends an unsubscribe link to an active subscriber; silent for unknown addresses. */
+    @Transactional
+    public void requestUnsubscribe(String address) {
+        String email = address == null ? "" : address.trim().toLowerCase();
+        jdbc.sql("""
+                SELECT id, confirmation_token FROM subscriptions
+                WHERE email = :email AND status = 'ACTIVE'
+                """)
+                .param("email", email)
+                .query((rs, row) -> Map.of("id", rs.getLong("id"), "token", rs.getObject("confirmation_token", UUID.class)))
+                .optional()
+                .ifPresent(row -> events.write("Subscription", row.get("id").toString(), "UnsubscribeRequested",
+                        Map.of("email", email, "token", row.get("token").toString())));
+    }
+
+    public Optional<String> findPendingEmail(UUID token) {
+        return jdbc.sql("""
+                SELECT email FROM subscriptions
+                WHERE confirmation_token = :token AND status = 'PENDING'
+                  AND created_at > now() - interval '24 hours'
+                """)
+                .param("token", token)
+                .query(String.class).optional();
+    }
+
     @Transactional
     public boolean confirm(UUID token) {
         Optional<Subscription> subscription = jdbc.sql("""

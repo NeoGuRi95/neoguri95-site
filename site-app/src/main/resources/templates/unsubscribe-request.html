@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('구독 해지 — neoguri95')}">
+  <title>구독 해지 — neoguri95</title>
+</head>
+<body>
+<div class="page">
+  <header th:replace="~{fragments :: header}"></header>
+  <nav th:replace="~{fragments :: tabs('none')}"></nav>
+
+  <main class="card-main">
+    <div class="action-card">
+      <img class="card-face" th:src="@{/images/raccoon-face.svg}" src="/images/raccoon-face.svg" alt="" width="64" height="44">
+      <th:block th:unless="${param.sent}">
+        <p class="kicker">UNSUBSCRIBE</p>
+        <h1>구독을 해지할까요?</h1>
+        <p>구독한 이메일 주소를 입력하면 해지 링크를 메일로 보내드려요.</p>
+        <form th:action="@{/subscriptions/unsubscribe-request}" action="/subscriptions/unsubscribe-request" method="post">
+          <div class="field">
+            <label for="unsubscribe-email">구독한 이메일</label>
+            <input id="unsubscribe-email" name="email" type="email" placeholder="hello@example.com" required autocomplete="email">
+          </div>
+          <button class="button-outline" type="submit">해지 링크 받기</button>
+        </form>
+        <a class="secondary-link" th:href="@{/}" href="/">계속 구독할게요</a>
+      </th:block>
+      <th:block th:if="${param.sent}">
+        <div class="badge badge-ok" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h1>메일을 확인해 주세요.</h1>
+        <p role="status">구독 중인 주소라면 해지 링크를 보냈어요. 메일의 링크를 누르면 해지가 완료됩니다.</p>
+        <a class="button-accent button-block" th:href="@{/}" href="/">홈으로 돌아가기</a>
+      </th:block>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments :: footer}"></div>
+</div>
+</body>
+</html>

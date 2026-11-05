@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('글쓰기 — neoguri95')}">
+  <title>글쓰기 — neoguri95</title>
+</head>
+<body>
+<div class="page">
+  <header th:replace="~{fragments :: header}"></header>
+  <nav th:replace="~{fragments :: tabs('write')}"></nav>
+
+  <main class="editor-main">
+    <form class="editor" th:action="@{/write}" action="/write" method="post">
+      <div class="editor-bar">
+        <a class="back-link" th:href="@{/}" href="/"><span aria-hidden="true">&lt;</span> 나가기</a>
+        <button class="button-accent" type="submit">발행하기</button>
+      </div>
+
+      <p class="editor-error" role="alert" th:if="${error}" th:text="${error}">오류 메시지</p>
+
+      <label class="sr-only" for="write-title">제목</label>
+      <input class="editor-title" id="write-title" name="title" type="text" placeholder="제목을 입력하세요"
+             maxlength="200" required th:value="${title}">
+
+      <div class="editor-box">
+        <label class="sr-only" for="write-body">본문</label>
+        <textarea id="write-body" name="body" rows="16" placeholder="일상을 기록해 보세요." required
+                  th:text="${body}"></textarea>
+      </div>
+
+      <div class="field editor-token">
+        <label for="write-token">관리자 토큰</label>
+        <input id="write-token" name="token" type="password" required autocomplete="current-password">
+      </div>
+      <p class="section-desc">발행하면 구독자에게 새 글 알림 메일이 나가요.</p>
+    </form>
+  </main>
+
+  <div th:replace="~{fragments :: footer}"></div>
+</div>
+</body>
+</html>

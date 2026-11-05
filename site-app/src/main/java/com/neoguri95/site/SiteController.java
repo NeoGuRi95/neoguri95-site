@@ -22,21 +22,26 @@ public class SiteController {
     private final JdbcClient jdbc;
     private final SubscriptionService subscriptions;
     private final PostService posts;
+    private final CommentService comments;
     private final String adminToken;
 
     public SiteController(JdbcClient jdbc, SubscriptionService subscriptions, PostService posts,
-            @Value("${site.admin-token:}") String adminToken) {
+            CommentService comments, @Value("${site.admin-token:}") String adminToken) {
         this.jdbc = jdbc;
         this.subscriptions = subscriptions;
         this.posts = posts;
+        this.comments = comments;
         this.adminToken = adminToken;
     }
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("posts", jdbc.sql("SELECT id, title, published_at FROM posts ORDER BY id DESC")
+        model.addAttribute("posts", jdbc.sql("""
+                SELECT id, title, LEFT(REGEXP_REPLACE(body, '\\s+', ' ', 'g'), 120) AS excerpt, published_at
+                FROM posts ORDER BY id DESC""")
                 .query((rs, row) -> Map.of("id", rs.getLong("id"),
                         "title", rs.getString("title"),
+                        "excerpt", rs.getString("excerpt"),
                         "publishedAt", rs.getTimestamp("published_at")))
                 .list());
         return "home";
@@ -50,8 +55,18 @@ public class SiteController {
                         "body", rs.getString("body"),
                         "publishedAt", rs.getTimestamp("published_at")))
                 .optional().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("postId", id);
         model.addAttribute("post", post);
+        model.addAttribute("comments", comments.list(id));
         return "post";
+    }
+
+    @PostMapping("/posts/{id}/comments")
+    public String comment(@PathVariable long id, @RequestParam String author, @RequestParam String body) {
+        if (!comments.add(id, author, body)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return "redirect:/posts/" + id + "#comments";
     }
 
     @PostMapping("/subscriptions")
@@ -63,6 +78,7 @@ public class SiteController {
     @GetMapping("/subscriptions/confirm")
     public String confirmPage(@RequestParam UUID token, Model model) {
         model.addAttribute("token", token);
+        model.addAttribute("email", subscriptions.findPendingEmail(token).orElse(null));
         return "confirm";
     }
 
@@ -70,6 +86,17 @@ public class SiteController {
     public String confirm(@RequestParam UUID token, Model model) {
         model.addAttribute("confirmed", subscriptions.confirm(token));
         return "subscription-result";
+    }
+
+    @GetMapping("/subscriptions/unsubscribe-request")
+    public String unsubscribeRequestPage() {
+        return "unsubscribe-request";
+    }
+
+    @PostMapping("/subscriptions/unsubscribe-request")
+    public String unsubscribeRequest(@RequestParam String email) {
+        subscriptions.requestUnsubscribe(email);
+        return "redirect:/subscriptions/unsubscribe-request?sent";
     }
 
     @GetMapping("/subscriptions/unsubscribe")
@@ -82,6 +109,31 @@ public class SiteController {
     public String unsubscribe(@RequestParam UUID token, Model model) {
         model.addAttribute("unsubscribed", subscriptions.unsubscribe(token));
         return "unsubscribe-result";
+    }
+
+    @GetMapping("/write")
+    public String writePage() {
+        return "write";
+    }
+
+    @PostMapping("/write")
+    public String write(@RequestParam String title, @RequestParam String body,
+            @RequestParam(required = false) String token, Model model) {
+        if (adminToken.isBlank() || !adminToken.equals(token)) {
+            return writeError(model, title, body, "관리자 토큰이 올바르지 않아요.");
+        }
+        try {
+            return "redirect:/posts/" + posts.publish(title, body);
+        } catch (IllegalArgumentException e) {
+            return writeError(model, title, body, e.getMessage());
+        }
+    }
+
+    private String writeError(Model model, String title, String body, String error) {
+        model.addAttribute("title", title);
+        model.addAttribute("body", body);
+        model.addAttribute("error", error);
+        return "write";
     }
 
     @PostMapping("/admin/posts")

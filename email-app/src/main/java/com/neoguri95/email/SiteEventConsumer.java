@@ -41,6 +41,13 @@ public class SiteEventConsumer {
                 enqueue(eventId, email, "CONFIRMATION", "neoguri95 새 글 알림 구독 확인",
                         "새 글 알림 구독을 완료하려면 아래 링크를 열어주세요.\n\n" + url);
             }
+            case "UnsubscribeRequested" -> {
+                String email = event.path("email").asText();
+                String url = baseUrl + "/subscriptions/unsubscribe?token=" + event.path("token").asText();
+                enqueue(eventId, email, "UNSUBSCRIBE", "neoguri95 새 글 알림 구독 해지",
+                        "새 글 알림 구독을 해지하려면 아래 링크를 열어주세요.\n"
+                                + "직접 요청하지 않았다면 이 메일은 무시해도 됩니다.\n\n" + url);
+            }
             case "SubscriptionConfirmed" -> jdbc.sql("""
                     INSERT INTO post_notification_subscribers (email, token) VALUES (:email, :token)
                     ON CONFLICT (email) DO UPDATE SET token = EXCLUDED.token, confirmed_at = now()

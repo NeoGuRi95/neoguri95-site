@@ -1,7 +1,31 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>구독 해지 — neoguri95</title><link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css"></head>
-<body><div class="site-wrap"><header class="site-header"><a class="brand" href="/" aria-label="neoguri95 홈"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>neoguri<span class="brand-number">95</span><span class="brand-dot">.</span></span></a><nav class="site-nav" aria-label="주 메뉴"><a href="/">홈</a><a href="/#posts">글 모음</a><a class="nav-subscribe" href="/#subscribe">새 글 알림 <span aria-hidden="true">&gt;</span></a></nav></header>
-  <main class="page-main"><a class="back-link" href="/"><span aria-hidden="true">&lt;</span> 홈으로</a><div class="action-card"><p class="page-kicker" th:text="${unsubscribed} ? 'SUBSCRIPTION / ENDED' : 'SUBSCRIPTION / CHECK LINK'">SUBSCRIPTION</p><h1 th:text="${unsubscribed} ? '구독을 해지했어요.' : '링크를 확인해 주세요.'">구독 해지</h1><p th:text="${unsubscribed} ? '그동안 함께해 주셔서 고마워요. 언제든 다시 찾아와 주세요!' : '이미 해지했거나 유효하지 않은 링크입니다.'">구독 결과</p><a class="button button-primary" href="/">홈으로 돌아가기 <span aria-hidden="true">&gt;</span></a></div></main>
-  <footer class="site-footer"><div><a class="footer-brand" href="/">neoguri95<span>.</span></a><p>생각을 기록하고, 가끔 나눕니다.</p></div><div class="footer-right"><span>© NEOGURI95</span></div></footer>
-</div></body></html>
+<head th:replace="~{fragments :: head('구독 해지 — neoguri95')}">
+  <title>구독 해지 — neoguri95</title>
+</head>
+<body>
+<div class="page">
+  <header th:replace="~{fragments :: header}"></header>
+  <nav th:replace="~{fragments :: tabs('none')}"></nav>
+
+  <main class="card-main">
+    <div class="action-card">
+      <img class="card-face" th:src="@{/images/raccoon-face.svg}" src="/images/raccoon-face.svg" alt="" width="64" height="44">
+      <th:block th:if="${unsubscribed}">
+        <div class="badge badge-ok" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+        <h1>구독을 해지했어요.</h1>
+        <p>그동안 함께해 주셔서 고마워요. 언제든 다시 찾아와 주세요!</p>
+      </th:block>
+      <th:block th:unless="${unsubscribed}">
+        <div class="badge badge-bad" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 7v6"/><path d="M12 17h.01"/></svg></div>
+        <h1>링크를 확인해 주세요.</h1>
+        <p>이미 해지했거나 유효하지 않은 링크입니다.</p>
+      </th:block>
+      <a class="button-accent button-block" th:href="@{/}" href="/">홈으로 돌아가기</a>
+    </div>
+  </main>
+
+  <div th:replace="~{fragments :: footer}"></div>
+</div>
+</body>
+</html>

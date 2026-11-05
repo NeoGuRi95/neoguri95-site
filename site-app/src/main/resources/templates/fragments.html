@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#15141a">
+  <title th:text="${title}">neoguri95</title>
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/raccoon-face.svg}" href="/images/raccoon-face.svg">
+  <link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css">
+</head>
+<body>
+
+<header class="site-header" th:fragment="header">
+  <div class="container">
+    <a class="brand-icon" th:href="@{/}" href="/" aria-label="neoguri95 홈">
+      <img th:src="@{/images/raccoon-dance.svg}" src="/images/raccoon-dance.svg" alt="" width="40" height="46">
+    </a>
+    <p class="site-title">neoguri<span>95</span></p>
+    <div class="header-actions">
+      <a class="button-accent" th:href="@{/write}" href="/write"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>글쓰기</a>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="주 메뉴" th:fragment="tabs(active)">
+  <div class="container">
+    <a th:href="@{/}" href="/" th:attr="aria-current=${active == 'home'} ? 'page' : null">홈</a>
+    <a th:href="@{/#posts}" href="/#posts">글 모음</a>
+  </div>
+</nav>
+
+<div class="container" th:fragment="footer">
+  <footer class="site-footer">
+    <span>© neoguri95</span>
+    <span>일상을 기록합니다.</span>
+  </footer>
+</div>
+
+</body>
+</html>

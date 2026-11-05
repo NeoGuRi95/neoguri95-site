@@ -1,71 +1,94 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f6f0e8">
-  <meta name="description" content="네오구리의 글과 새 글 알림을 만나는 공간입니다.">
+<head th:replace="~{fragments :: head('neoguri95')}">
   <title>neoguri95</title>
-  <link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css">
 </head>
 <body>
-  <div class="site-wrap" id="top">
-    <header class="site-header">
-      <a class="brand" href="/" aria-label="neoguri95 홈">
-        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span>neoguri<span class="brand-number">95</span><span class="brand-dot">.</span></span>
-      </a>
-      <nav class="site-nav" aria-label="주 메뉴">
-        <a href="#posts">글</a>
-        <a href="#subscribe">새 글 알림</a>
-      </nav>
-    </header>
+<div class="page" id="top">
+  <header th:replace="~{fragments :: header}"></header>
+  <nav th:replace="~{fragments :: tabs('home')}"></nav>
 
-    <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">NEOGURI95.COM</p>
-          <h1 id="hero-title">안녕하세요,<br>네오구리입니다.</h1>
-          <p class="hero-description">만들고 배우며 떠오른 생각을 기록합니다.</p>
-          <a class="text-link" href="#posts">글 읽기 <span aria-hidden="true">&gt;</span></a>
-        </div>
+  <div class="container home-layout">
+    <aside class="sidebar" aria-label="소개와 구독">
+      <section class="intro" aria-labelledby="hero-title">
         <div class="hero-image">
-          <img th:src="@{/images/hero-scene.svg}" src="/images/hero-scene.svg" alt="줄무늬 꼬리를 가진 픽셀 너구리가 노트북을 타이핑하는 모습" width="480" height="360">
+          <img th:src="@{/images/hero-scene.svg}" src="/images/hero-scene.svg"
+               alt="비가 내리는 도시 야경이 보이는 창가 방에서 헤드셋을 쓰고 FPS 게임을 하는 너구리의 뒷모습" width="320" height="240">
+        </div>
+        <h1 id="hero-title">안녕하세요, 너구리입니다.</h1>
+        <p>일상을 기록합니다.</p>
+        <div class="link-list">
+          <a href="https://neoguri95.github.io/" target="_blank" rel="noopener">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-4 3 4 3"/><path d="M16 9l4 3-4 3"/><path d="M13.5 6l-3 12"/></svg>
+            <span>개발 블로그</span>
+          </a>
         </div>
       </section>
 
-      <section class="posts-section" id="posts" aria-labelledby="posts-title">
-        <h2 id="posts-title">글</h2>
-        <ul class="post-list" th:if="${!#lists.isEmpty(posts)}">
-          <li th:each="post : ${posts}">
-            <a th:href="@{/posts/{id}(id=${post.id})}">
-              <time th:attr="datetime=${#dates.format(post.publishedAt, 'yyyy-MM-dd')}" th:text="${#dates.format(post.publishedAt, 'yyyy.MM.dd')}">2026.11.04</time>
-              <span class="post-title" th:text="${post.title}">글 제목</span>
-              <span class="post-arrow" aria-hidden="true">&gt;</span>
-            </a>
-          </li>
-        </ul>
-        <p class="empty-posts" th:if="${#lists.isEmpty(posts)}">첫 글을 준비하고 있어요.</p>
-      </section>
-
-      <section class="subscribe-section" id="subscribe" aria-labelledby="subscribe-title">
-        <div class="subscribe-copy">
-          <h2 id="subscribe-title">새 글 알림</h2>
-          <p>새 글이 올라오면 이메일로 알려드릴게요.</p>
+      <section id="subscribe" aria-labelledby="subscribe-title">
+        <div class="section-title-row">
+          <h2 class="section-title" id="subscribe-title">새 글 알림 받기</h2>
+          <a th:href="@{/subscriptions/unsubscribe-request}" href="/subscriptions/unsubscribe-request">해지하기</a>
         </div>
-        <form action="/subscriptions" method="post">
-          <label for="email">이메일 주소</label>
-          <div class="input-row">
-            <input id="email" name="email" type="email" placeholder="hello@example.com" required autocomplete="email">
-            <button type="submit">구독하기</button>
+        <p class="section-desc">새 글이 올라오면 이메일로 알려드릴게요. 확인 메일의 링크를 누르면 구독이 완료되고, 언제든 해지할 수 있어요.</p>
+        <form th:action="@{/subscriptions}" action="/subscriptions" method="post">
+          <label class="sr-only" for="email">이메일 주소</label>
+          <div class="inline-form">
+            <input id="email" name="email" type="email" placeholder="이메일 주소" required autocomplete="email">
+            <button type="submit">구독</button>
           </div>
-          <p class="form-hint">확인 메일의 링크를 누르면 구독이 완료됩니다. 언제든 해지할 수 있어요.</p>
         </form>
-        <p class="form-success" role="status" th:if="${param.subscription}">확인 메일을 보냈어요. 메일의 링크를 눌러 구독을 완료해 주세요.</p>
+        <p class="form-status" role="status" th:if="${param.subscription}">확인 메일을 보냈어요. 메일의 링크를 눌러 구독을 완료해 주세요.</p>
       </section>
-    </main>
+    </aside>
 
-    <footer class="site-footer"><span>© neoguri95</span><a href="#top">맨 위로 ^</a></footer>
+    <main class="feed" id="posts">
+      <p class="empty" th:if="${#lists.isEmpty(posts)}">첫 글을 준비하고 있어요.</p>
+
+      <th:block th:unless="${#lists.isEmpty(posts)}">
+        <div class="feature-row">
+          <a class="featured" th:with="latest=${posts[0]}" th:href="@{/posts/{id}(id=${latest.id})}">
+            <span class="featured-label">LATEST</span>
+            <span class="featured-title" th:text="${latest.title}">가장 최근 글 제목</span>
+            <span class="excerpt" th:text="${latest.excerpt}">글 요약</span>
+            <time class="meta" th:attr="datetime=${#dates.format(latest.publishedAt, 'yyyy-MM-dd')}"
+                  th:text="${#dates.format(latest.publishedAt, 'yyyy.MM.dd')}">2026.11.04</time>
+          </a>
+
+          <th:block th:if="${#lists.size(posts) > 1}">
+            <div class="feature-divider" aria-hidden="true"></div>
+            <ul class="recent-list" aria-label="최근 글">
+              <li th:each="post, stat : ${posts}" th:if="${stat.index >= 1 and stat.index <= 4}">
+                <a th:href="@{/posts/{id}(id=${post.id})}">
+                  <span class="recent-title" th:text="${post.title}">글 제목</span>
+                  <span class="excerpt" th:text="${post.excerpt}">글 요약</span>
+                  <time class="meta" th:attr="datetime=${#dates.format(post.publishedAt, 'yyyy-MM-dd')}"
+                        th:text="${#dates.format(post.publishedAt, 'yyyy.MM.dd')}">2026.10.28</time>
+                </a>
+              </li>
+            </ul>
+          </th:block>
+        </div>
+
+        <section aria-labelledby="archive-title" th:if="${#lists.size(posts) > 5}">
+          <div class="section-head">
+            <h2 id="archive-title">지난 글</h2>
+          </div>
+          <ul class="archive-list">
+            <li th:each="post, stat : ${posts}" th:if="${stat.index >= 5}">
+              <a th:href="@{/posts/{id}(id=${post.id})}">
+                <span class="recent-title" th:text="${post.title}">글 제목</span>
+                <time class="meta" th:attr="datetime=${#dates.format(post.publishedAt, 'yyyy-MM-dd')}"
+                      th:text="${#dates.format(post.publishedAt, 'yyyy.MM.dd')}">2026.10.01</time>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </th:block>
+    </main>
   </div>
+
+  <div th:replace="~{fragments :: footer}"></div>
+</div>
 </body>
 </html>

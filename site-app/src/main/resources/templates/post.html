@@ -1,9 +1,48 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f6f0e8"><title th:text="${post.title} + ' — neoguri95'">글 — neoguri95</title><link rel="stylesheet" th:href="@{/css/site.css}" href="/css/site.css"></head>
-<body><div class="site-wrap">
-  <header class="site-header"><a class="brand" href="/" aria-label="neoguri95 홈"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span>neoguri<span class="brand-number">95</span><span class="brand-dot">.</span></span></a><nav class="site-nav" aria-label="주 메뉴"><a href="/">홈</a><a href="/#posts">글 모음</a><a class="nav-subscribe" href="/#subscribe">새 글 알림 <span aria-hidden="true">&gt;</span></a></nav></header>
-  <main class="page-main"><a class="back-link" href="/#posts"><span aria-hidden="true">&lt;</span> 글 목록으로</a><article class="article-card"><p class="page-kicker">NEOGURI95 / NOTE</p><h1 th:text="${post.title}">글 제목</h1><time class="article-date" th:text="${#dates.format(post.publishedAt, 'yyyy.MM.dd')}">2026.11.04</time><div class="article-body" th:text="${post.body}">글 본문</div><div class="article-end">+ THANKS FOR READING</div></article></main>
-  <footer class="site-footer"><div><a class="footer-brand" href="/">neoguri95<span>.</span></a><p>생각을 기록하고, 가끔 나눕니다.</p></div><div class="footer-right"><span>MADE WITH &lt;3 &amp; COFFEE</span><span>© NEOGURI95</span></div></footer>
-</div></body>
+<head th:replace="~{fragments :: head(${post.title} + ' — neoguri95')}">
+  <title>글 — neoguri95</title>
+</head>
+<body>
+<div class="page">
+  <header th:replace="~{fragments :: header}"></header>
+  <nav th:replace="~{fragments :: tabs('post')}"></nav>
+
+  <main class="article-main">
+    <a class="back-link" th:href="@{/#posts}" href="/#posts"><span aria-hidden="true">&lt;</span> 글 목록</a>
+    <article>
+      <p class="kicker">NOTE</p>
+      <h1 class="article-title" th:text="${post.title}">글 제목</h1>
+      <time class="article-date" th:attr="datetime=${#dates.format(post.publishedAt, 'yyyy-MM-dd')}"
+            th:text="${#dates.format(post.publishedAt, 'yyyy.MM.dd')}">2026.11.04</time>
+      <div class="article-body" th:text="${post.body}">글 본문</div>
+      <p class="article-end">+ THANKS FOR READING</p>
+    </article>
+
+    <section class="comments" id="comments" aria-labelledby="comments-title">
+      <h2 id="comments-title">댓글 <span th:text="${#lists.size(comments)}">0</span></h2>
+      <form class="comment-form" th:action="@{/posts/{id}/comments(id=${postId})}" action="/posts/1/comments" method="post">
+        <label class="sr-only" for="comment-body">댓글</label>
+        <textarea id="comment-body" name="body" rows="3" placeholder="댓글을 남겨 주세요." required maxlength="1000"></textarea>
+        <div class="comment-form-row">
+          <label class="sr-only" for="comment-author">이름</label>
+          <input id="comment-author" name="author" type="text" placeholder="이름" required maxlength="40" autocomplete="nickname">
+          <button class="button-accent" type="submit">댓글 남기기</button>
+        </div>
+      </form>
+      <ul class="comment-list" th:unless="${#lists.isEmpty(comments)}">
+        <li th:each="comment : ${comments}">
+          <p class="comment-meta"><span class="comment-author" th:text="${comment.author}">작성자</span> ·
+            <time th:attr="datetime=${#dates.format(comment.createdAt, 'yyyy-MM-dd''T''HH:mm')}"
+                  th:text="${#dates.format(comment.createdAt, 'yyyy.MM.dd HH:mm')}">2026.11.04 12:00</time></p>
+          <p class="comment-body" th:text="${comment.body}">댓글 내용</p>
+        </li>
+      </ul>
+      <p class="comment-empty" th:if="${#lists.isEmpty(comments)}">첫 댓글을 남겨 주세요.</p>
+    </section>
+  </main>
+
+  <div th:replace="~{fragments :: footer}"></div>
+</div>
+</body>
 </html>
