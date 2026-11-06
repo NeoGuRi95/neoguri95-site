@@ -21,11 +21,50 @@
       <input class="editor-title" id="write-title" name="title" type="text" placeholder="제목을 입력하세요"
              maxlength="200" required th:value="${title}">
 
-      <div class="editor-box">
-        <label class="sr-only" for="write-body">본문</label>
-        <textarea id="write-body" name="body" rows="16" placeholder="일상을 기록해 보세요." required
-                  th:text="${body}"></textarea>
+      <div class="editor-box" data-editor th:attr="data-upload-url=@{/admin/images}" data-upload-url="/admin/images">
+        <div class="editor-toolbar" role="toolbar" aria-label="서식">
+          <div class="editor-group">
+            <button type="button" data-cmd="paragraph" title="본문">본문</button>
+            <button type="button" data-cmd="h2" title="큰 제목">H2</button>
+            <button type="button" data-cmd="h3" title="작은 제목">H3</button>
+          </div>
+          <div class="editor-group">
+            <button type="button" data-cmd="bold" title="굵게 (Ctrl+B)" aria-label="굵게"><strong>B</strong></button>
+            <button type="button" data-cmd="italic" title="기울임 (Ctrl+I)" aria-label="기울임"><em>I</em></button>
+            <button type="button" data-cmd="underline" title="밑줄 (Ctrl+U)" aria-label="밑줄"><u>U</u></button>
+            <button type="button" data-cmd="strike" title="취소선" aria-label="취소선"><s>S</s></button>
+            <button type="button" data-cmd="code" title="인라인 코드" aria-label="인라인 코드">&lt;/&gt;</button>
+            <button type="button" data-cmd="link" title="링크 (선택한 글자에 링크 걸기)">링크</button>
+          </div>
+          <div class="editor-group">
+            <button type="button" data-cmd="bulletList" title="글머리 목록" aria-label="글머리 목록">• 목록</button>
+            <button type="button" data-cmd="orderedList" title="번호 목록" aria-label="번호 목록">1. 목록</button>
+            <button type="button" data-cmd="blockquote" title="인용">인용</button>
+            <button type="button" data-cmd="codeBlock" title="코드 블록">코드</button>
+            <button type="button" data-cmd="hr" title="구분선" aria-label="구분선">―</button>
+            <button type="button" data-cmd="image" title="이미지 올리기 (붙여넣기·끌어놓기도 돼요)">이미지</button>
+          </div>
+          <div class="editor-group">
+            <button type="button" data-cmd="undo" title="실행 취소 (Ctrl+Z)" aria-label="실행 취소">↶</button>
+            <button type="button" data-cmd="redo" title="다시 실행 (Ctrl+Shift+Z)" aria-label="다시 실행">↷</button>
+          </div>
+        </div>
+        <div class="editor-linkbar" data-linkbar hidden>
+          <label class="sr-only" for="write-link">링크 주소</label>
+          <input id="write-link" type="url" placeholder="https://" autocomplete="off">
+          <button type="button" class="button-accent" data-link-apply>적용</button>
+          <button type="button" class="editor-plain" data-link-remove>링크 제거</button>
+        </div>
+        <div class="editor-content" data-editor-content></div>
+        <div class="editor-status">
+          <span class="editor-message" data-editor-message role="status" aria-live="polite"></span>
+          <span data-editor-count>0자</span>
+        </div>
+        <input type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple hidden data-image-input>
+        <noscript><p class="editor-error">글쓰기 에디터는 JavaScript가 필요해요.</p></noscript>
       </div>
+      <input type="hidden" name="bodyHtml" value="">
+      <input type="hidden" name="bodyJson" th:value="${bodyJson}" value="">
 
       <div class="field editor-token">
         <label for="write-token">관리자 토큰</label>
@@ -37,5 +76,6 @@
 
   <div th:replace="~{fragments :: footer}"></div>
 </div>
+<script type="module" th:src="@{/js/editor.js}" src="/js/editor.js"></script>
 </body>
 </html>

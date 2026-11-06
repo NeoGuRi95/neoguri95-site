@@ -4,6 +4,32 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-flyway'
+	implementation 'org.jsoup:jsoup:1.24.1'
 	runtimeOnly 'org.flywaydb:flyway-database-postgresql'
 	runtimeOnly 'org.postgresql:postgresql'
+}
+
+// 글쓰기 에디터(Tiptap) 번들. Node.js와 npm이 PATH에 있어야 한다.
+def frontendDir = file('frontend')
+
+def npmInstall = tasks.register('npmInstall', Exec) {
+	workingDir frontendDir
+	commandLine 'npm', 'ci', '--no-audit', '--no-fund'
+	inputs.files("${frontendDir}/package.json", "${frontendDir}/package-lock.json")
+	outputs.dir("${frontendDir}/node_modules")
+}
+
+def buildFrontend = tasks.register('buildFrontend', Exec) {
+	dependsOn npmInstall
+	workingDir frontendDir
+	commandLine 'npm', 'run', 'build'
+	inputs.dir("${frontendDir}/src")
+	inputs.files("${frontendDir}/package-lock.json", "${frontendDir}/vite.config.js")
+	outputs.dir(layout.buildDirectory.dir('frontend'))
+}
+
+tasks.named('processResources') {
+	from(buildFrontend) {
+		into 'static'
+	}
 }
