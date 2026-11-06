@@ -15,7 +15,8 @@
       <h1 class="article-title" th:text="${post.title}">글 제목</h1>
       <time class="article-date" th:attr="datetime=${#dates.format(post.publishedAt, 'yyyy-MM-dd')}"
             th:text="${#dates.format(post.publishedAt, 'yyyy.MM.dd')}">2026.11.04</time>
-      <div class="article-body" th:text="${post.body}">글 본문</div>
+      <div class="article-body prose" th:if="${post.bodyHtml != null}" th:utext="${post.bodyHtml}">글 본문</div>
+      <div class="article-body article-plain" th:unless="${post.bodyHtml != null}" th:text="${post.body}">글 본문</div>
       <p class="article-end">+ THANKS FOR READING</p>
     </article>
 
