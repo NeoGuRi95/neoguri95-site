@@ -1,9 +1,9 @@
 package com.neoguri95.site;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Controller;
@@ -23,10 +23,10 @@ public class SiteController {
     private final SubscriptionService subscriptions;
     private final PostService posts;
     private final CommentService comments;
-    private final String adminToken;
+    private final AdminToken adminToken;
 
     public SiteController(JdbcClient jdbc, SubscriptionService subscriptions, PostService posts,
-            CommentService comments, @Value("${site.admin-token:}") String adminToken) {
+            CommentService comments, AdminToken adminToken) {
         this.jdbc = jdbc;
         this.subscriptions = subscriptions;
         this.posts = posts;
@@ -49,11 +49,17 @@ public class SiteController {
 
     @GetMapping("/posts/{id}")
     public String post(@PathVariable long id, Model model) {
-        var post = jdbc.sql("SELECT title, body, published_at FROM posts WHERE id = :id")
+        var post = jdbc.sql("SELECT title, body, body_html, published_at FROM posts WHERE id = :id")
                 .param("id", id)
-                .query((rs, row) -> Map.of("title", rs.getString("title"),
-                        "body", rs.getString("body"),
-                        "publishedAt", rs.getTimestamp("published_at")))
+                .query((rs, row) -> {
+                    // body_html은 에디터 도입 전 글에서 null이라 Map.of를 쓸 수 없다.
+                    var view = new HashMap<String, Object>();
+                    view.put("title", rs.getString("title"));
+                    view.put("body", rs.getString("body"));
+                    view.put("bodyHtml", rs.getString("body_html"));
+                    view.put("publishedAt", rs.getTimestamp("published_at"));
+                    return view;
+                })
                 .optional().orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("postId", id);
         model.addAttribute("post", post);
@@ -117,21 +123,24 @@ public class SiteController {
     }
 
     @PostMapping("/write")
-    public String write(@RequestParam String title, @RequestParam String body,
+    public String write(@RequestParam String title,
+            @RequestParam(defaultValue = "") String bodyHtml,
+            @RequestParam(defaultValue = "") String bodyJson,
             @RequestParam(required = false) String token, Model model) {
-        if (adminToken.isBlank() || !adminToken.equals(token)) {
-            return writeError(model, title, body, "관리자 토큰이 올바르지 않아요.");
+        if (!adminToken.matches(token)) {
+            return writeError(model, title, bodyJson, "관리자 토큰이 올바르지 않아요.");
         }
         try {
-            return "redirect:/posts/" + posts.publish(title, body);
+            return "redirect:/posts/" + posts.publish(title, PostContent.fromEditor(bodyHtml, bodyJson));
         } catch (IllegalArgumentException e) {
-            return writeError(model, title, body, e.getMessage());
+            return writeError(model, title, bodyJson, e.getMessage());
         }
     }
 
-    private String writeError(Model model, String title, String body, String error) {
+    // 에디터가 원본 문서(JSON)로 쓰던 내용을 복원한다.
+    private String writeError(Model model, String title, String bodyJson, String error) {
         model.addAttribute("title", title);
-        model.addAttribute("body", body);
+        model.addAttribute("bodyJson", bodyJson);
         model.addAttribute("error", error);
         return "write";
     }
@@ -139,11 +148,15 @@ public class SiteController {
     @PostMapping("/admin/posts")
     public String publish(@RequestHeader(value = "X-Admin-Token", required = false) String token,
             @RequestBody NewPost request) {
-        if (adminToken.isBlank() || !adminToken.equals(token)) {
+        if (!adminToken.matches(token)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        return "redirect:/posts/" + posts.publish(request.title(), request.body());
+        var content = request.bodyHtml() != null
+                ? PostContent.fromEditor(request.bodyHtml(), null)
+                : PostContent.fromPlainText(request.body());
+        return "redirect:/posts/" + posts.publish(request.title(), content);
     }
 
-    public record NewPost(String title, String body) {}
+    /** body는 평문, bodyHtml은 HTML 본문이다. bodyHtml이 있으면 그것을 쓴다. */
+    public record NewPost(String title, String body, String bodyHtml) {}
 }

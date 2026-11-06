@@ -12,12 +12,18 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   flyway:
     user: ${SITE_FLYWAY_USER:${spring.datasource.username}}
     password: ${SITE_FLYWAY_PASSWORD:${spring.datasource.password}}
 
 site:
   admin-token: ${SITE_ADMIN_TOKEN:}
+  # 본문 이미지 저장 위치. 운영에서는 영속 볼륨 경로로 지정한다.
+  upload-dir: ${SITE_UPLOAD_DIR:data/uploads}
 
 management:
   endpoints:
