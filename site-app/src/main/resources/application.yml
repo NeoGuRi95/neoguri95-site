@@ -8,6 +8,10 @@ spring:
     url: ${SITE_DB_URL}
     username: ${SITE_DB_USER}
     password: ${SITE_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
   flyway:
     user: ${SITE_FLYWAY_USER:${spring.datasource.username}}
     password: ${SITE_FLYWAY_PASSWORD:${spring.datasource.password}}
