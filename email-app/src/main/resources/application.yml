@@ -8,6 +8,10 @@ spring:
     url: ${EMAIL_DB_URL}
     username: ${EMAIL_DB_USER}
     password: ${EMAIL_DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
   flyway:
     user: ${EMAIL_FLYWAY_USER:${spring.datasource.username}}
     password: ${EMAIL_FLYWAY_PASSWORD:${spring.datasource.password}}
