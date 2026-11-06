@@ -3,6 +3,8 @@ package com.neoguri95.site;
 import java.io.IOException;
 import java.util.Map;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,15 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
+@RequiredArgsConstructor
 public class ImageController {
 
     private final AdminToken adminToken;
     private final ImageStorage images;
-
-    public ImageController(AdminToken adminToken, ImageStorage images) {
-        this.adminToken = adminToken;
-        this.images = images;
-    }
 
     @PostMapping("/admin/images")
     public ResponseEntity<Map<String, String>> upload(

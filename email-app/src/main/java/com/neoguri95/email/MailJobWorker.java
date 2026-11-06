@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,20 +15,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@RequiredArgsConstructor
 public class MailJobWorker {
 
     private static final Logger log = LoggerFactory.getLogger(MailJobWorker.class);
 
     private final JdbcClient jdbc;
     private final JavaMailSender mailSender;
+    @Value("${email.from}")
     private final String from;
-
-    public MailJobWorker(JdbcClient jdbc, JavaMailSender mailSender,
-            @Value("${email.from}") String from) {
-        this.jdbc = jdbc;
-        this.mailSender = mailSender;
-        this.from = from;
-    }
 
     @Scheduled(fixedDelay = 3000)
     @Transactional

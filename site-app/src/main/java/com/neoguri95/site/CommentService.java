@@ -3,20 +3,19 @@ package com.neoguri95.site;
 import java.util.List;
 import java.util.Map;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
     static final int MAX_AUTHOR = 40;
     static final int MAX_BODY = 1000;
 
     private final JdbcClient jdbc;
-
-    public CommentService(JdbcClient jdbc) {
-        this.jdbc = jdbc;
-    }
 
     public List<Map<String, Object>> list(long postId) {
         return jdbc.sql("""

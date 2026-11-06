@@ -4,21 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
 import tools.jackson.databind.json.JsonMapper;
 
 @Component
+@RequiredArgsConstructor
 public class SiteEventWriter {
 
     private final JdbcClient jdbc;
     private final JsonMapper json;
-
-    public SiteEventWriter(JdbcClient jdbc, JsonMapper json) {
-        this.jdbc = jdbc;
-        this.json = json;
-    }
 
     public void write(String subjectType, String subjectId, String eventType, Map<String, ?> data) {
         UUID eventId = UUID.randomUUID();

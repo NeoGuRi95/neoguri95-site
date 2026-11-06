@@ -2,6 +2,8 @@ package com.neoguri95.site;
 
 import java.util.Map;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,17 +12,12 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
 @Service
+@RequiredArgsConstructor
 public class PostService {
 
     private final JdbcClient jdbc;
     private final SiteEventWriter events;
     private final JsonMapper json;
-
-    public PostService(JdbcClient jdbc, SiteEventWriter events, JsonMapper json) {
-        this.jdbc = jdbc;
-        this.events = events;
-        this.json = json;
-    }
 
     @Transactional
     public long publish(String title, PostContent content) {

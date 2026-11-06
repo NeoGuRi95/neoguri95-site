@@ -2,6 +2,8 @@ package com.neoguri95.email;
 
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,18 +14,13 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 @Component
+@RequiredArgsConstructor
 public class SiteEventConsumer {
 
     private final JdbcClient jdbc;
     private final JsonMapper json;
+    @Value("${site.base-url}")
     private final String baseUrl;
-
-    public SiteEventConsumer(JdbcClient jdbc, JsonMapper json,
-            @Value("${site.base-url}") String baseUrl) {
-        this.jdbc = jdbc;
-        this.json = json;
-        this.baseUrl = baseUrl;
-    }
 
     @KafkaListener(topics = "site-events")
     @Transactional
