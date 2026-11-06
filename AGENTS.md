@@ -10,6 +10,10 @@
   - 예시: `com.neoguri95.site`, `com.neoguri95.email`.
 - `settings.gradle`, 실행 명령, 문서의 모듈 참조는 실제 디렉터리 이름과 일치시킨다.
 
+## 코드 컨벤션
+
+- 코드 작성 규칙은 [코드 컨벤션](docs/code-convention.md)을 따른다. 코드를 작성하거나 수정하기 전에 이 문서를 읽는다.
+
 ## Pull Request
 
 - 브랜치, PR 제목, 본문 작성 규칙은 [PR 작성 규칙](docs/pull-request.md)을 따른다. PR을 만들기 전에 이 문서를 읽는다.

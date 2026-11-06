@@ -4,20 +4,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class SubscriptionService {
 
     private final JdbcClient jdbc;
     private final SiteEventWriter events;
-
-    public SubscriptionService(JdbcClient jdbc, SiteEventWriter events) {
-        this.jdbc = jdbc;
-        this.events = events;
-    }
 
     @Transactional
     public boolean requestSubscription(String address) {

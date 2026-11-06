@@ -2,19 +2,18 @@ package com.neoguri95.site;
 
 import java.time.Duration;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 public class UploadResourceConfig implements WebMvcConfigurer {
 
     private final ImageStorage images;
-
-    public UploadResourceConfig(ImageStorage images) {
-        this.images = images;
-    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

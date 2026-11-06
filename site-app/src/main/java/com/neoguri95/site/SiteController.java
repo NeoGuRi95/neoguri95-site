@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
+@RequiredArgsConstructor
 public class SiteController {
 
     private final JdbcClient jdbc;
@@ -24,15 +27,6 @@ public class SiteController {
     private final PostService posts;
     private final CommentService comments;
     private final AdminToken adminToken;
-
-    public SiteController(JdbcClient jdbc, SubscriptionService subscriptions, PostService posts,
-            CommentService comments, AdminToken adminToken) {
-        this.jdbc = jdbc;
-        this.subscriptions = subscriptions;
-        this.posts = posts;
-        this.comments = comments;
-        this.adminToken = adminToken;
-    }
 
     @GetMapping("/")
     public String home(Model model) {
